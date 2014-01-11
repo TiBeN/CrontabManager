@@ -14,6 +14,13 @@ It enable you to :
 - `crontab` command-line utility (should be already installed in your distribution).
 - `sudo`, if you want to manage crontab of another user than runtime user without running into right issues (see below)
 
+## Installation:
+
+The library can be installed using Composer. 
+```   
+composer require tiben/crontab-manager
+```
+
 ## Usage:
 The library is composed of three classes: 
 
