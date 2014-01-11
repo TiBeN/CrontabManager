@@ -96,9 +96,28 @@ class CrontabRepository
      */
     public function addJob(CrontabJob $crontabJob)
     {
+        if (array_search($crontabJob, $this->crontabJobs) !== false) {
+            $exceptionMessage = 'This job is already in the crontab. Please consider cloning the'
+                . 'CrontabJob object if you want it to be registered twice.'
+            ;
+            throw new \LogicException($exceptionMessage);
+        }
         array_push($this->crontabJobs, $crontabJob);
     }
-    
+
+    /**
+     * Remove a CrontabJob in the connected crontab
+     * @param CrontabJob $crontabJob
+     */
+    public function removeJob(CrontabJob $crontabJob)
+    {
+        $jobKey = array_search($crontabJob, $this->crontabJobs, true);
+        if ($jobKey === false) {
+            throw new \LogicException('This job is not part of this crontab');
+        }
+        unset($this->crontabJobs[$jobKey]);
+    }
+
     /**
      * Save all operations to the connected crontab.
      */
