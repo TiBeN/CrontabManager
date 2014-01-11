@@ -27,10 +27,6 @@ use TiBeN\CrontabManager\CrontabJob;
     
 class CrontabJobTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-    }
-    
     /**
      * Test parsing crontab and creation of cronjob 
      * @dataProvider crontabLines
