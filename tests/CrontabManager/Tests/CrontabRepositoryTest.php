@@ -175,6 +175,42 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Remove a job
+     */
+    public function testRemove()
+    {
+        /* Create fake crontabAdapter */
+        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+
+        $fakeCrontabAdapter
+            ->expects($this->any())
+            ->method('readCrontab')
+            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'testing_persisted_crontab.txt')))
+        ;
+
+        $fakeCrontabAdapter
+            ->expects($this->once())
+            ->method('writeCrontab')
+            ->with($this->equalTo(file_get_contents($this->fixturesPath . 'testing_removed_crontab.txt')))
+        ;
+
+        $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
+
+        /* Retrieve job */
+        $crontabJobs = $crontabRepository->findJobByRegex('/launch\ -param\ mycommand/');
+
+        /* Apply some local updates on the job to ensure
+         * it is linked by reference to the repository
+         */
+        $crontabJobs[0]->minutes = '00';
+        $crontabJobs[0]->hours = '01';
+
+        /* Remove job */
+        $crontabRepository->removeJob($crontabJobs[0]);
+        $crontabRepository->persist();
+    }
+
+    /**
      * Test if pass a wrong regular expression when searching by regex throw an invalid regex exception
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Not a valid Regex : preg_match(): No ending delimiter '/' found
@@ -190,5 +226,46 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         ;
         $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
         $crontabRepository->findJobByRegex('/$');
+    }
+
+    /**
+     * Test remove an unknown Job
+     * @expectedException LogicException
+     * @expectedExceptionMessage This job is not part of this crontab
+     */
+    public function testRemoveAnUnknownJob()
+    {
+        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+
+        $fakeCrontabAdapter
+            ->expects($this->any())
+            ->method('readCrontab')
+            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'simple_crontab.txt')))
+        ;
+        $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
+
+        $job = CrontabJob::createFromCrontabLine('30 23 * * * launch -param mycommand');
+        $crontabRepository->removeJob($job);
+    }
+
+    /**
+     * Add an already in the repository job
+     * @expectedException \LogicException
+     */
+    public function testAddAnAlreadyInTheRepositoryJob()
+    {
+        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+
+        $fakeCrontabAdapter
+            ->expects($this->any())
+            ->method('readCrontab')
+            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'simple_crontab.txt')))
+        ;
+
+        $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
+
+        /* Modify the existing job */
+        $crontabJobs = $crontabRepository->findJobByRegex('/launch\ -param\ mycommand/');
+        $crontabRepository->addJob($crontabJobs[0]);
     }
 }
