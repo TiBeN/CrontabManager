@@ -15,7 +15,7 @@ It enable you to :
 - `sudo`, if you want to manage crontab of another user than runtime user without running into right issues (see below)
 
 ## Usage:
-The library is composed of three class: 
+The library is composed of three classes: 
 
 - `CrontabJob` is an entity class which represent a cron Job.
 - `CrontabRepository` is used to persist/retrieve your jobs.
