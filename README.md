@@ -71,7 +71,7 @@ $crontabAdapter = new CrontabAdapter('bobby');
 $crontabRepository = new CrontabRepository();
 ```
 
-Using this way you will propably run into user right issue. 
+Using this way you will propably run into user rights issue. 
 This can be resolved by editing your sudoers file using 'visudo'.     
 If you want to allow user `www-data` to edit the crontab of user `bobby`, add this line:
 ```
