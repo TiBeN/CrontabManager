@@ -64,7 +64,8 @@ $crontabRepository->persist();
 ### Find a specific cron job from the crontab repository and update it:
 Suppose we want to modify the hour of an already existing cronjob. Finding existings jobs is made using some regular expressions. Search in made against the entire crontab line. 
 ```php
-$crontabJob = $crontabRepository->findJobByRegex('/Logging\ disk\ usage/');
+$results = $crontabRepository->findJobByRegex('/Logging\ disk\ usage/');
+$crontabJob = $results[0];
 $crontabJob->hours = '21';
 $crontabRepository->persist();
 ```
