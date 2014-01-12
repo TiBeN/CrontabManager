@@ -70,7 +70,7 @@ $crontabJob->hours = '21';
 $crontabRepository->persist();
 ```
 
-### Remove a cron job from the crontab
+### Remove a cron job from the crontab:
 You can removing a job like this :
 ```php
 $results = $crontabRepository->findJobByRegex('/Logging\ disk\ usage/');
@@ -78,7 +78,7 @@ $crontabJob = $results[0];
 $crontabRepository->removeJob($crontabJob);
 $crontabRepository->persist();
 ```
-Note: Since cron jobs are internally matched by reference, theses must be previously obtained by the repository.   
+Note: Since cron jobs are internally matched by reference, they must be previously obtained from the repository or previously added.
 
 ### Work with the crontab of another user than runtime user:
 This feature allow you to manage the crontab of another user than the user who launched the runtime. This can be useful when the runtime user is `www-data` but the owner of the crontab you want to edit is your own linux user account. 
