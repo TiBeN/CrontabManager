@@ -32,7 +32,7 @@ class CrontabAdapter
     /**
      * Instantiate an crontabAdapter
      * 
-     * @param String $userName Optional Specifie the crontab 
+     * @param String $userName Optional Tell the crontab 
      * user where the adapter will try to read (by default user = runtime user)
      * @param Boolean $useSudo Tell Adapter use sudo command to connect 
      * to crontab of another user than the runtime user.
@@ -75,7 +75,7 @@ class CrontabAdapter
             
             /* Special case : the crontab is empty throw bad exit code but access is ok */
             if (!preg_match('/^no crontab for .+$/', $output[0])) {
-                throw new DomainException('Error when trying to read crontab : ' . implode(' ', $output));
+                throw new \DomainException('Error when trying to read crontab : ' . implode(' ', $output));
             } else {
                 $output = '';
             }
@@ -106,14 +106,8 @@ class CrontabAdapter
         exec($crontabCommandLine . ' 2>&1', $output, $exitCode);
         
         /* exec error handling */
-        if ($exitCode !== 0) {
-                
-            /* Special case : the crontab is empty throw bad exit code but access is ok */
-            if (!preg_match('/^no crontab for .+$/', $output[0])) {
-                throw new DomainException('Error when trying to write crontab : ' . implode(' ', $output));
-            } else {
-                $output = '';
-            }
+        if ($exitCode !== 0) { 
+            throw new \DomainException('Error when trying to write crontab : ' . implode(' ', $output));
         }
     }
 }
