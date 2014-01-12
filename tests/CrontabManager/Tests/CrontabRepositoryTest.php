@@ -24,7 +24,7 @@ use TiBeN\CrontabManager\CrontabAdapter;
 
 /**
  * CrontabRepository class PHPUnit test cases
- * @author FranceProNet
+ * @author TiBeN
  */
 class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
 {
