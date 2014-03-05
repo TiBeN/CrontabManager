@@ -18,7 +18,7 @@ It enable you to :
 
 The library can be installed using Composer. 
 ```   
-composer require tiben/crontab-manager
+composer require tiben/crontab-manager ~1.0
 ```
 
 ## Usage:
@@ -32,7 +32,7 @@ The library is composed of three classes:
 In order to work, the CrontabRepository need an instance of CrontabAdapter which handle raw read/write against the crontab.
 
 ```php
-$crontabRepository = new $crontabRepository(new CrontabAdapter());
+$crontabRepository = new CrontabRepository(new CrontabAdapter());
 ```
 
 ### Create new Job and persist it into the crontab:
@@ -86,7 +86,7 @@ This feature allow you to manage the crontab of another user than the user who l
 To do this, simply pass the username of the crontab owner as parameter of the CrontabAdapter constructor. Suppose you are `www-data` and you want to edit the crontab of user `bobby`:
 ```php
 $crontabAdapter = new CrontabAdapter('bobby');
-$crontabRepository = new CrontabRepository();
+$crontabRepository = new CrontabRepository($crontabAdapter);
 ```
 
 Using this way you will propably run into user rights issue. 
@@ -100,7 +100,7 @@ which tell sudo to not ask for password when call `crontab` of user `bobby`
 Now, you can access to the crontab of user `bobby` like this :
 ```php
 $crontabAdapter = new CrontabAdapter('bobby', true);
-$crontabRepository = new CrontabRepository();
+$crontabRepository = new CrontabRepository($crontabAdapter);
 ```
 Note the second parameter `true` of the CrontabAdapter constructor call. This boolean tell the CrontabAdapter to use 'sudo' internally to read/write the crontab.   
 
