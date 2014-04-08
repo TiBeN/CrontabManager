@@ -30,7 +30,7 @@ class CrontabAdapter
     private $useSudo;
     
     /**
-     * Instantiate an crontabAdapter
+     * Instantiate a crontabAdapter
      * 
      * @param String $userName Optional Tell the crontab 
      * user where the adapter will try to read (by default user = runtime user)
