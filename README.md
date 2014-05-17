@@ -104,7 +104,7 @@ $crontabRepository = new CrontabRepository($crontabAdapter);
 ```
 Note the second parameter `true` of the CrontabAdapter constructor call. This boolean tell the CrontabAdapter to use 'sudo' internally to read/write the crontab.   
 
-### Enable or Disable a cronjob
+### Enable or disable a cron job
 You can enable or disable your cron jobs by setting the "enabled" attribute of a CronJob object accordingly :
 ```php
 $crontabJob->enabled = false;
