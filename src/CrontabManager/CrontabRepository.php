@@ -22,6 +22,7 @@ namespace TiBeN\CrontabManager;
  * CrontabRepository
  * 
  * Access and manage CrontabJob Objects (add, modify, delete). 
+ * @author TiBeN
  */
 class CrontabRepository
 {
@@ -30,6 +31,7 @@ class CrontabRepository
     
     /**
      * Contain comments on the top of the crontab file. 
+     *
      * @var String
      */
     public $headerComments;
@@ -50,6 +52,7 @@ class CrontabRepository
      * Instanciate a Crontab repository.
      * A CrontabAdapter adapter must be provided in order to communicate
      * with the system "crontab" command line.
+     *
      * @param CrontabAdapter $crontabAdapter
      */
     public function __construct(CrontabAdapter $crontabAdapter)
@@ -60,6 +63,7 @@ class CrontabRepository
     
     /**
      * Return the CrontabJob in the "connected" crontab
+     *
      * @return Array of CrontabJobs
      */
     public function getJobs()
@@ -69,6 +73,7 @@ class CrontabRepository
         
     /**
      * Finds jobs by matching theirs task commands with a regex
+     *
      * @param String $regex
      * @throws InvalidArgumentException
      * @return Array of CronJobs
@@ -104,6 +109,7 @@ class CrontabRepository
     
     /**
      * Add an new CrontabJob in the connected crontab
+     *
      * @param CrontabJob $crontabJob
      */
     public function addJob(CrontabJob $crontabJob)
@@ -119,6 +125,7 @@ class CrontabRepository
 
     /**
      * Remove a CrontabJob in the connected crontab
+     *
      * @param CrontabJob $crontabJob
      */
     public function removeJob(CrontabJob $crontabJob)
@@ -152,7 +159,6 @@ class CrontabRepository
         }
         
         $this->crontabAdapter->writeCrontab($crontabRawData);
-                
     }
     
     /**
@@ -192,7 +198,6 @@ class CrontabRepository
                     }
                 }
             }
-
         }
     }
 }
