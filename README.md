@@ -1,6 +1,6 @@
 # CrontabManager
 
-A PHP library for managing GNU/Linux cron jobs.
+PHP library to manage programmatically GNU/Linux cron jobs.
 
 It enable you to : 
 
@@ -26,7 +26,7 @@ The library is composed of three classes:
 
 - `CrontabJob` is an entity class which represent a cron Job.
 - `CrontabRepository` is used to persist/retrieve your jobs.
-- `CrontabAdapter` abstract raw read/write against the crontab.  
+- `CrontabAdapter` abstract raw crontab read/write. 
 
 ### Instanciate the repository:
 In order to work, the CrontabRepository need an instance of CrontabAdapter which handle raw read/write against the crontab.
@@ -71,7 +71,7 @@ $crontabRepository->persist();
 ```
 
 ### Remove a cron job from the crontab:
-You can removing a job like this :
+You can remove a job like this :
 ```php
 $results = $crontabRepository->findJobByRegex('/Logging\ disk\ usage/');
 $crontabJob = $results[0];
@@ -104,5 +104,9 @@ $crontabRepository = new CrontabRepository($crontabAdapter);
 ```
 Note the second parameter `true` of the CrontabAdapter constructor call. This boolean tell the CrontabAdapter to use 'sudo' internally to read/write the crontab.   
 
-
-
+### Enable or Disable a cronjob
+You can enable or disable your cron jobs by setting the "enabled" attribute of a CronJob object accordingly :
+```php
+$crontabJob->enabled = false;
+```
+This will have the effect to prepend your cron job by a "#" in your crontab when persisting it. 

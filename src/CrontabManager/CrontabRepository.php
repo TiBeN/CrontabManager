@@ -35,6 +35,18 @@ class CrontabRepository
     public $headerComments;
     
     /**
+     * Contain lines to not consider as cronjob when parsing
+     * the crontab
+     *
+     * @var array
+     */
+    public $crontabLinesToBypass = array(
+
+        // Prevent to parse the default Ubuntu crontab header example 
+        '# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/'
+    );
+
+    /**
      * Instanciate a Crontab repository.
      * A CrontabAdapter adapter must be provided in order to communicate
      * with the system "crontab" command line.
@@ -159,11 +171,19 @@ class CrontabRepository
         foreach ($crontabRawLines as $crontabRawLine) {
             
             try {
-                /* Use The crontabJob Factory to test if the line is a crontab job line */
+                // Use The crontabJob Factory to test
+                // if the line is a crontab job line
                 $crontabJob = CrontabJob::createFromCrontabLine($crontabRawLine);
-                array_push($this->crontabJobs, $crontabJob);
+                $isCrontabJob = true;
             } catch (\Exception $e) {
-                /* if no crontabjobs not already fund, we considers line as header comment */
+                $isCrontabJob = false;
+            }
+
+            if ($isCrontabJob && !in_array($crontabRawLine, $this->crontabLinesToBypass)) {
+                array_push($this->crontabJobs, $crontabJob);
+            } else {
+                // if any crontabjobs has been fund for now,
+                // the line is a header comment
                 if (empty($this->crontabJobs)) {
                     if (empty($this->headerComments)) {
                         $this->headerComments = $crontabRawLine . "\n";
@@ -172,6 +192,7 @@ class CrontabRepository
                     }
                 }
             }
+
         }
     }
 }

@@ -94,7 +94,11 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
-            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'simple_crontab.txt')))
+            ->will(
+                $this->returnValue(
+                    file_get_contents($this->fixturesPath . 'simple_crontab.txt')
+                )
+            )
         ;
 
         $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
@@ -115,7 +119,11 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
-            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'simple_crontab.txt')))
+            ->will(
+                $this->returnValue(
+                    file_get_contents($this->fixturesPath . 'simple_crontab.txt')
+                )
+            )
         ;
 
         $crontabJob = new CrontabJob();
@@ -152,7 +160,11 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         $fakeCrontabAdapter
             ->expects($this->once())
             ->method('writeCrontab')
-            ->with($this->equalTo(file_get_contents($this->fixturesPath . 'testing_persisted_crontab.txt')))
+            ->with(
+                $this->equalTo(
+                    file_get_contents($this->fixturesPath . 'testing_persisted_crontab.txt')
+                )
+            )
         ;
 
         $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
@@ -185,13 +197,21 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
-            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'testing_persisted_crontab.txt')))
+            ->will(
+                $this->returnValue(
+                    file_get_contents($this->fixturesPath . 'testing_persisted_crontab.txt')
+                )
+            )
         ;
 
         $fakeCrontabAdapter
             ->expects($this->once())
             ->method('writeCrontab')
-            ->with($this->equalTo(file_get_contents($this->fixturesPath . 'testing_removed_crontab.txt')))
+            ->with(
+                $this->equalTo(
+                    file_get_contents($this->fixturesPath . 'testing_removed_crontab.txt')
+                )
+            )
         ;
 
         $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
@@ -222,7 +242,11 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
-            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'simple_crontab.txt')))
+            ->will(
+                $this->returnValue(
+                    file_get_contents($this->fixturesPath . 'simple_crontab.txt')
+                )
+            )
         ;
         $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
         $crontabRepository->findJobByRegex('/$');
@@ -240,7 +264,11 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
-            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'simple_crontab.txt')))
+            ->will(
+                $this->returnValue(
+                    file_get_contents($this->fixturesPath . 'simple_crontab.txt')
+                )
+            )
         ;
         $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
 
@@ -259,7 +287,11 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
         $fakeCrontabAdapter
             ->expects($this->any())
             ->method('readCrontab')
-            ->will($this->returnValue(file_get_contents($this->fixturesPath . 'simple_crontab.txt')))
+            ->will(
+                $this->returnValue(
+                    file_get_contents($this->fixturesPath . 'simple_crontab.txt')
+                )
+            )
         ;
 
         $crontabRepository = new CrontabRepository($fakeCrontabAdapter);

@@ -24,48 +24,64 @@ namespace TiBeN\CrontabManager;
  * 
  * @author Benjamin Legendre
  */
-
 class CrontabJob
 {
     /**
-     * min (0 - 59)
+     * Tell whether the cron job is enabled or not
+     * This will add or not a # at the beginning of the cron line
+     *
+     * @var boolean
+     */
+    public $enabled = true;
+
+    /**
+     * Min (0 - 59)
+     *
      * @var String/int
+     *
      */
     public $minutes;
     
     /**
-     * hour (0 - 23)
+     * Hour (0 - 23)
+     *
      * @var String/int
      */
     public $hours;
     
     /**
-     * day of month (1 - 31)
+     * Day of month (1 - 31)
+     *
      * @var String/int
      */
     public $dayOfMonth;
     
     /**
-     * month (1 - 12)
+     * Month (1 - 12)
+     *
      * @var String/int
      */
     public $months;
     
     /**
-     * day of week (0 - 6) (0 or 6 are Sunday to Saturday, or use names)
+     * Day of week (0 - 6) (0 or 6 are Sunday to Saturday, or use names)
+     *
      * @var String/int
      */
     public $dayOfWeek;
 
     /**
-     * the task command line to be executed 
+     * The task command line to be executed 
+     *
      * @var String
      */
     public $taskCommandLine;
     
     /**
-     * Optional comment that will be placed at the end of the crontab line preceded by #
-     * @var unknown_type
+     * Optional comment that will be placed at the end of the crontab line 
+     * and preceded by a #
+     *
+     * @var String
      */
     public $comments;
     
@@ -74,64 +90,74 @@ class CrontabJob
      * Shorcut définition that replace standard définition (preceded by @)
      * possibles values : yearly, monthly, weekly, daily, hourly, reboot
      * When a shortcut is defined, it overwrite stantard définition
+     *
      * @var String
      */
     public $shortCut;
     
     /**
      * Factory method to create a CrontabJob from a crontab line.
+     *
      * @param String $crontabLine
      * @throws InvalidArgumentException
      * @return CrontabJob
      */
     public static function createFromCrontabLine($crontabLine)
     {
-        /* Check crontab line format validity */
-        $crontabLineRegex = '/^[\s\t]*(([*0-9,-\/]+)[\s\t]+([*0-9,-\/]+)'
+        // Check crontab line format validity
+        $crontabLineRegex = '/^[\s\t]*(#)?[\s\t]*(([*0-9,-\/]+)[\s\t]+([*0-9,-\/]+)'
             . '[\s\t]+([*0-9,-\/]+)[\s\t]+([*a-z0-9,-\/]+)[\s\t]+([*a-z0-9,-\/]+)|'
             . '(@(reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)))'
             . '[\s\t]+([^#]+)([\s\t]+#(.+))?$/'
         ;
 
         if (!preg_match($crontabLineRegex, $crontabLine, $matches)) {
-            throw new \InvalidArgumentException('Crontab line not well formated then can\'t be parsed');
+            throw new \InvalidArgumentException(
+                'Crontab line not well formated then can\'t be parsed'
+            );
         }
 
-        /* Create the job from parsed crontab line values */
+        // Create the job from parsed crontab line values
         $crontabJob = new self();
-        
+      
+        if (!empty($matches[1])) {
+            $crontabJob->enabled = false;
+        }
+
         if (!empty($matches)) {
-            $crontabJob->minutes = $matches[2];
-            $crontabJob->hours = $matches[3];
-            $crontabJob->dayOfMonth = $matches[4];
-            $crontabJob->months = $matches[5];
-            $crontabJob->dayOfWeek = $matches[6];
+            $crontabJob->minutes = $matches[3];
+            $crontabJob->hours = $matches[4];
+            $crontabJob->dayOfMonth = $matches[5];
+            $crontabJob->months = $matches[6];
+            $crontabJob->dayOfWeek = $matches[7];
         }
         
-        if (!empty($matches[7])) {
-            $crontabJob->shortCut = $matches[8];
+        if (!empty($matches[8])) {
+            $crontabJob->shortCut = $matches[9];
         }
         
-        $crontabJob->taskCommandLine = $matches[9];
-        if (!empty($matches[11])) {
-            $crontabJob->comments = $matches[11];
+        $crontabJob->taskCommandLine = $matches[10];
+        if (!empty($matches[12])) {
+            $crontabJob->comments = $matches[12];
         }
         
         return $crontabJob;
-        
-        
     }
     
     /**
      * Format the CrontabJob to a crontab line 
+     *
      * @throws InvalidArgumentException
+     * @return String
      */
     public function formatCrontabLine()
     {
         
-        /* Check if job has a task command line*/
+        // Check if job has a task command line
         if (!isset($this->taskCommandLine) || empty($this->taskCommandLine)) {
-            throw new \InvalidArgumentException('CrontabJob contain\'s no task command line');
+            throw new \InvalidArgumentException(
+                'CrontabJob contain\'s no task command line'
+            );
         }
         
         $taskPlanningNotation = (isset($this->shortCut) && !empty($this->shortCut))
@@ -147,7 +173,8 @@ class CrontabJob
         ;
         
         return sprintf(
-            '%s %s%s',
+            '%s%s %s%s',
+            ($this->enabled ? '' : '#'),
             $taskPlanningNotation,
             $this->taskCommandLine,
             (isset($this->comments) ? (' #' . $this->comments) : '')

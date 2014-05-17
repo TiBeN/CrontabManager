@@ -39,7 +39,9 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
     public static function crontabLines()
     {
         $crontabLines = array();
+        
         $crontabJob = new CrontabJob();
+        $crontabJob->enabled = true;
         $crontabJob->minutes = '30';
         $crontabJob->hours = '23';
         $crontabJob->dayOfMonth = '*';
@@ -49,6 +51,7 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
         $crontabLines[] = array('30 23 * * * df >> /tmp/df.log', $crontabJob);
         
         $crontabJob = new CrontabJob();
+        $crontabJob->enabled = true;
         $crontabJob->minutes = '12';
         $crontabJob->hours = '10';
         $crontabJob->dayOfMonth = '2-5';
@@ -58,6 +61,7 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
         $crontabLines[] = array('12 10 2-5 * * df >> /tmp/df.log', $crontabJob);
         
         $crontabJob = new CrontabJob();
+        $crontabJob->enabled = true;
         $crontabJob->minutes = '59';
         $crontabJob->hours = '23';
         $crontabJob->dayOfMonth = '*/2';
@@ -67,6 +71,7 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
         $crontabLines[] = array('59 23 */2 * * df >> /tmp/df.log', $crontabJob);
         
         $crontabJob = new CrontabJob();
+        $crontabJob->enabled = true;
         $crontabJob->minutes = '0';
         $crontabJob->hours = '0';
         $crontabJob->dayOfMonth = '25-31';
@@ -77,6 +82,7 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
         
         /* space at start test case */
         $crontabJob = new CrontabJob();
+        $crontabJob->enabled = true;
         $crontabJob->minutes = '0';
         $crontabJob->hours = '*';
         $crontabJob->dayOfMonth = '*/2';
@@ -88,6 +94,7 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
 
         /* Tab or spaces test case */
         $crontabJob = new CrontabJob();
+        $crontabJob->enabled = true;
         $crontabJob->minutes = '0';
         $crontabJob->hours = '*';
         $crontabJob->dayOfMonth = '*/2';
@@ -99,10 +106,33 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
         
         /* Cron shortcut test case */
         $crontabJob = new CrontabJob();
+        $crontabJob->enabled = true;
         $crontabJob->shortCut = 'daily';
         $crontabJob->taskCommandLine = 'my-script.sh';
         $crontabLines[] = array('@daily my-script.sh', $crontabJob);
         
+        /* Disabled cron test case - without spaces */
+        $crontabJob = new CrontabJob();
+        $crontabJob->enabled = false;
+        $crontabJob->minutes = '30';
+        $crontabJob->hours = '23';
+        $crontabJob->dayOfMonth = '*';
+        $crontabJob->months = '*';
+        $crontabJob->dayOfWeek = '*';
+        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabLines[] = array('#30 23 * * * df >> /tmp/df.log', $crontabJob);
+
+        /* Disabled cron test case - with spaces */
+        $crontabJob = new CrontabJob();
+        $crontabJob->enabled = false;
+        $crontabJob->minutes = '30';
+        $crontabJob->hours = '23';
+        $crontabJob->dayOfMonth = '*';
+        $crontabJob->months = '*';
+        $crontabJob->dayOfWeek = '*';
+        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabLines[] = array('#   30 23 * * * df >> /tmp/df.log', $crontabJob);
+
         return $crontabLines;
     }
     
@@ -128,7 +158,23 @@ class CrontabJobTest extends \PHPUnit_Framework_TestCase
         $crontabJob->hours = '23';
         $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
         $crontabJob->comments = 'This job is commented';
-        $this->assertEquals('30 23 * * * df >> /tmp/df.log #This job is commented', $crontabJob->formatCrontabLine());
+        $this->assertEquals(
+            '30 23 * * * df >> /tmp/df.log #This job is commented', 
+            $crontabJob->formatCrontabLine()
+        );
+
+        /* disabled crontab line */
+        $crontabJob = new CrontabJob();
+        $crontabJob->enabled = false;
+        $crontabJob->minutes = '30';
+        $crontabJob->hours = '23';
+        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob->comments = 'This job is commented';
+        $this->assertEquals(
+            '#30 23 * * * df >> /tmp/df.log #This job is commented', 
+            $crontabJob->formatCrontabLine()
+        );
+
     }
     
     /**
