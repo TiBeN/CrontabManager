@@ -22,7 +22,7 @@ namespace TiBeN\CrontabManager;
  * CrontabJob
  * Represent a Job of the crontab.
  * 
- * @author Benjamin Legendre
+ * @author TiBeN
  */
 class CrontabJob
 {

@@ -22,13 +22,15 @@ use TiBeN\CrontabManager\CrontabJob;
 
 /**
  * CrontabJob class PHPUnit test cases
- * @author Benjamin Legendre
+ *
+ * @author TiBeN
  */
     
 class CrontabJobTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test parsing crontab and creation of cronjob 
+     * 
      * @dataProvider crontabLines
      */
     public function testCreateACrontabJobFromCrontabLine($crontabLine, $crontabJob)

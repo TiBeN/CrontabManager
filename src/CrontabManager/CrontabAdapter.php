@@ -21,7 +21,8 @@ namespace TiBeN\CrontabManager;
 /**
  * Crontab adapter. 
  * Retrieve and write cron jobs data using the "crontab" command line.
- * @author Benjamin Legendre
+ *
+ * @author TiBeN
  */
 class CrontabAdapter
 {
@@ -59,6 +60,7 @@ class CrontabAdapter
     /**
      * Read the crontab and return
      * raw data
+     *
      * @return String $output the crontab raw data
      */
     public function readCrontab()
@@ -75,7 +77,9 @@ class CrontabAdapter
             
             /* Special case : the crontab is empty throw bad exit code but access is ok */
             if (!preg_match('/^no crontab for .+$/', $output[0])) {
-                throw new \DomainException('Error when trying to read crontab : ' . implode(' ', $output));
+                throw new \DomainException(
+                    'Error when trying to read crontab : ' . implode(' ', $output)
+                );
             } else {
                 $output = '';
             }
@@ -89,6 +93,7 @@ class CrontabAdapter
     
     /**
      * Write the raw crontab data to the crontab.
+     *
      * @param String $crontabRawData
      */
     public function writeCrontab($crontabRawData)
@@ -107,7 +112,9 @@ class CrontabAdapter
         
         /* exec error handling */
         if ($exitCode !== 0) { 
-            throw new \DomainException('Error when trying to write crontab : ' . implode(' ', $output));
+            throw new \DomainException(
+                'Error when trying to write crontab : ' . implode(' ', $output)
+            );
         }
     }
 }
