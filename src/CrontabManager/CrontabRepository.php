@@ -98,7 +98,7 @@ class CrontabRepository
         
         if (!empty($this->crontabJobs)) {
             foreach ($this->crontabJobs as $crontabJob) {
-                if (preg_match($regex, $crontabJob->taskCommandLine)) {
+                if (preg_match($regex, $crontabJob->formatCrontabLine())) {
                     array_push($crontabJobs, $crontabJob);
                 }
             }

@@ -151,6 +151,41 @@ class CrontabRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test finding a job by a regular expression
+     * using the comments
+     */
+    public function testFindJobByRegexUsingComments()
+    {
+        /* Create fake crontabAdapter */
+        $fakeCrontabAdapter = $this->getMock('TiBeN\CrontabManager\CrontabAdapter');
+        $fakeCrontabAdapter
+            ->expects($this->any())
+            ->method('readCrontab')
+            ->will(
+                $this->returnValue("")
+            )
+        ;
+
+        $crontabJob = new CrontabJob();
+        $crontabJob->minutes = '30';
+        $crontabJob->hours = '23';
+        $crontabJob->dayOfMonth = '*';
+        $crontabJob->months = '*';
+        $crontabJob->dayOfWeek = '*';
+        $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
+        $crontabJob->comments = 'Logging disk usage';
+
+        $expectedCrontabJobs = array($crontabJob);
+
+        $crontabRepository = new CrontabRepository($fakeCrontabAdapter);
+        $crontabRepository->addJob($crontabJob);
+
+        $crontabJobs = $crontabRepository->findJobByRegex('/Logging\ disk\ usage/'); 
+
+        $this->assertEquals($expectedCrontabJobs, $crontabJobs);
+    }
+
+    /**
      * This test will modify an existing job and append a new job to the crontab.
      */
     public function testPersist()
