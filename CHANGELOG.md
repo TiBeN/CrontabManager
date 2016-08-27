@@ -1,4 +1,4 @@
-1.3.0 (2016-08-27)
+1.2.1 (2016-08-27)
 ------------------
 - Fixed findJobByRegex not searching comments
 
