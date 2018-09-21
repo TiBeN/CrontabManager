@@ -26,7 +26,7 @@ use TiBeN\CrontabManager\CrontabJob;
  * @author TiBeN
  */
     
-class CrontabJobTest extends \PHPUnit_Framework_TestCase
+class CrontabJobTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test parsing crontab and creation of cronjob 

@@ -1,3 +1,9 @@
+Current (master)
+----------------
+
+- Make tests compatible with PHPUnit 6+
+- Fix #6 (Thanks @wenqinruan)
+
 1.2.1 (2016-08-27)
 ------------------
 - Fixed findJobByRegex not searching comments
