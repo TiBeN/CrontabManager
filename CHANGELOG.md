@@ -1,6 +1,5 @@
-Current (master)
-----------------
-
+1.2.2 (2018-09-25)
+------------------
 - Make tests compatible with PHPUnit 6+
 - Fix #6 (Thanks @wenqinruan)
 
