@@ -1,23 +1,22 @@
 CrontabManager
 ==============
 
-PHP library for GNU/Linux cron jobs management.
+PHP library to manage programmatically GNU/Linux cron jobs.
 
-Some features:
+It enables you to :
 
--   Deal with your cron jobs in PHP
--   Create new Cron jobs
--   Update existing cron jobs
--   Enable / disable cron jobs
+-   Deal with your cron jobs in PHP.
+-   Create new Cron jobs.
+-   Update existing cron jobs.
 -   Manage cron jobs of others users than runtime user using some sudo
-    tricks (see below)
+    tricks (see below).
 
-Requirements:
--------------
+Requirments:
+------------
 
 -   PHP 5.3+
--   `crontab` command-line utility (installed by default on common Linux
-    distribution)
+-   `crontab` command-line utility (should be already installed in your
+    distribution).
 -   `sudo`, if you want to manage crontab of another user than runtime
     user without running into right issues (see below)
 
@@ -33,9 +32,8 @@ Usage:
 
 The library is composed of three classes:
 
--   `CrontabJob` is an entity class that represents a cron job.
--   `CrontabRepository` is used to persist and or retrieve your cron
-    jobs.
+-   `CrontabJob` is an entity class which represents a cron job.
+-   `CrontabRepository` is used to persist/retrieve your cron jobs.
 -   `CrontabAdapter` handles cron jobs persistance in the crontab.
 
 ### Instanciate the repository:
@@ -47,13 +45,13 @@ CrontabAdapter.
 $crontabRepository = new CrontabRepository(new CrontabAdapter());
 ```
 
-### Create new Job and persist it into the crontab
+### Create new Job and persist it into the crontab:
 
 Suppose you want to create an new job which consists of launching the
-command `df >> /tmp/df.log` every day at 23:30. There is two ways this
-can be done:
+command "df &gt;&gt; /tmp/df.log" every day at 23:30. You can do it in
+two ways.
 
--   In Pure `OO` way :
+-   In Pure oo way :
 
     ``` {.php}
     $crontabJob = new CrontabJob();
@@ -72,7 +70,7 @@ can be done:
     $crontabJob = CrontabJob::createFromCrontabLine('30 23 * * * df >> /tmp/df.log');
     ```
 
-You can now add your new cron job in the crontab repository and persist
+You can now add your new cronjob in the crontab repository and persist
 all changes to the crontab.
 
 ``` {.php}
@@ -80,10 +78,10 @@ $crontabRepository->addJob($crontabJob);
 $crontabRepository->persist();
 ```
 
-### Find a specific cron job from the crontab repository and update it
+### Find a specific cron job from the crontab repository and update it:
 
 Suppose we want to modify the hour of an already existing cronjob.
-Finding existing cron jobs is done using regular expressions. The regex
+Finding existings jobs is done using some regular expressions. The regex
 is applied to the entire crontab line.
 
 ``` {.php}
@@ -93,9 +91,9 @@ $crontabJob->hours = '21';
 $crontabRepository->persist();
 ```
 
-### Remove a cron job from the crontab
+### Remove a cron job from the crontab:
 
-You can remove a job like this:
+You can remove a job like this :
 
 ``` {.php}
 $results = $crontabRepository->findJobByRegex('/Logging\ disk\ usage/');
@@ -107,15 +105,14 @@ $crontabRepository->persist();
 Note: Since cron jobs are internally matched by reference, they must be
 previously obtained from the repository or previously added.
 
-### Work with the crontab of another user than runtime user
+### Work with the crontab of another user than runtime user:
 
-This feature allows you to manage the crontab of another (unix) user
-than the user who launched the php runtime. This can be useful when the
-runtime user is `www-data` — common when PHP is used along with a
-webserver — but the owner of the crontab you want to edit is your own
+This feature allows you to manage the crontab of another user than the
+user who launched the runtime. This can be useful when the runtime user
+is `www-data` but the owner of the crontab you want to edit is your own
 linux user account.
 
-To do this, simply pass the username of the crontab owner as a parameter
+To do this, simply pass the username of the crontab owner as parameter
 of the CrontabAdapter constructor. Suppose you are `www-data` and you
 want to edit the crontab of user `bobby`:
 
@@ -124,7 +121,7 @@ $crontabAdapter = new CrontabAdapter('bobby');
 $crontabRepository = new CrontabRepository($crontabAdapter);
 ```
 
-In this context you will propably run into user rights issues. This can
+Using this way you will propably run into user rights issues. This can
 be handled by editing your sudoers file using 'visudo'.\
 If you want to allow user `www-data` to edit the crontab of user
 `bobby`, add this line:
@@ -141,9 +138,9 @@ $crontabAdapter = new CrontabAdapter('bobby', true);
 $crontabRepository = new CrontabRepository($crontabAdapter);
 ```
 
-**Note the second parameter `true`** of the CrontabAdapter constructor
-call. This boolean tells the CrontabAdapter to use `sudo` internally
-when calling `crontab`.
+Note the second parameter `true` of the CrontabAdapter constructor call.
+This boolean tells the CrontabAdapter to use `sudo` internally when
+calling `crontab`.
 
 ### Enable or disable a cron job
 
@@ -154,5 +151,20 @@ attribute of a CronJob object accordingly :
 $crontabJob->enabled = false;
 ```
 
-This will have the effect to prepend your cron job by a "\#" in your
+This will have the effect to prepend your cron job with a "\#" in your
 crontab when persisting it.
+
+## Unit tests
+
+Tests have been written using PHPUnit and require version 5.3+. To execute tests:
+
+    $ phpunit <crontab-library-path>/tests
+
+If you installed the library using Composer and installed dev-dependencies you
+can execute them using included PHPUnit as dependency:
+
+    $ ./vendor/bin/phpunit <crontab-library-path/tests
+
+# Contributions
+
+... are welcome :)
