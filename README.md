@@ -154,17 +154,21 @@ $crontabJob->enabled = false;
 This will have the effect to prepend your cron job with a "\#" in your
 crontab when persisting it.
 
-## Unit tests
+Unit tests
+----------
 
-Tests have been written using PHPUnit and require version 5.3+. To execute tests:
+Tests have been written using PHPUnit and require version 5.3+. To
+execute tests:
 
     $ phpunit <crontab-library-path>/tests
 
-If you installed the library using Composer and installed dev-dependencies you
-can execute them using included PHPUnit as dependency:
+If you installed the library using Composer and installed
+dev-dependencies you can execute them using included PHPUnit as
+dependency:
 
-    $ ./vendor/bin/phpunit <crontab-library-path/tests
+    $ ./vendor/bin/phpunit <crontab-library-path>/tests
 
-# Contributions
+Contributions
+-------------
 
 ... are welcome :)
