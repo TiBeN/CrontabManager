@@ -47,7 +47,7 @@ $crontabRepository = new CrontabRepository(new CrontabAdapter());
 
 ### Create new Job and persist it into the crontab:
 
-Suppose you want to create an new job which consists of launching the
+Suppose you want to create a new job which consists of launching the
 command "df &gt;&gt; /tmp/df.log" every day at 23:30. You can do it in
 two ways.
 
@@ -55,13 +55,7 @@ two ways.
 
     ``` {.php}
     $crontabJob = new CrontabJob();
-    $crontabJob->minutes = '30';
-    $crontabJob->hours = '23';
-    $crontabJob->dayOfMonth = '*';
-    $crontabJob->months = '*';
-    $crontabJob->dayOfWeek = '*';
-    $crontabJob->taskCommandLine = 'df >> /tmp/df.log';
-    $crontabJob->comments = 'Logging disk usage'; // Comments are persisted in the crontab
+    $crontabJob->setMinutes(30)->setHours(23)->setDayOfMonth('*')->setMonths('*')->setDayOfWeek('*')->setTaskCommandLine('df >> /tmp/df.log')->setComments('Logging disk usage'); // Comments are persisted in the crontab
     ```
 
 -   From raw cron syntax string using a factory method :
@@ -87,7 +81,7 @@ is applied to the entire crontab line.
 ``` {.php}
 $results = $crontabRepository->findJobByRegex('/Logging\ disk\ usage/');
 $crontabJob = $results[0];
-$crontabJob->hours = '21';
+$crontabJob->setHours(21);
 $crontabRepository->persist();
 ```
 
@@ -144,14 +138,14 @@ calling `crontab`.
 
 ### Enable or disable a cron job
 
-You can enable or disable your cron jobs by setting the `enabled`
-attribute of a CronJob object accordingly :
+You can enable or disable your cron jobs by using the `setEnabled()`
+method of a CronJob object accordingly :
 
 ``` {.php}
-$crontabJob->enabled = false;
+$crontabJob->setEnabled(false);
 ```
 
-This will have the effect to prepend your cron job with a "\#" in your
+This will prepend your cron job with a `#` in your
 crontab when persisting it.
 
 Unit tests
