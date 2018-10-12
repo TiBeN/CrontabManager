@@ -359,7 +359,12 @@ class CrontabJob
         }
 
         if (!empty($matches)) {
-            $crontabJob->setMinutes($matches[3])->setHours($matches[4])->setDayOfMonth($matches[5])->setMonths($matches[6])->setDayOfWeek($matches[7]);
+            $crontabJob
+                ->setMinutes($matches[3])
+                ->setHours($matches[4])
+                ->setDayOfMonth($matches[5])
+                ->setMonths($matches[6])
+                ->setDayOfWeek($matches[7]);
         }
         
         if (!empty($matches[8])) {

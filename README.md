@@ -36,7 +36,7 @@ The library is composed of three classes:
 -   `CrontabRepository` is used to persist/retrieve your cron jobs.
 -   `CrontabAdapter` handles cron jobs persistance in the crontab.
 
-### Instanciate the repository:
+### Instantiate the repository:
 
 In order to work, the CrontabRepository needs an instance of
 CrontabAdapter.
@@ -55,7 +55,14 @@ two ways.
 
     ``` {.php}
     $crontabJob = new CrontabJob();
-    $crontabJob->setMinutes(30)->setHours(23)->setDayOfMonth('*')->setMonths('*')->setDayOfWeek('*')->setTaskCommandLine('df >> /tmp/df.log')->setComments('Logging disk usage'); // Comments are persisted in the crontab
+    $crontabJob
+        ->setMinutes(30)
+        ->setHours(23)
+        ->setDayOfMonth('*')
+        ->setMonths('*')
+        ->setDayOfWeek('*')
+        ->setTaskCommandLine('df >> /tmp/df.log')
+        ->setComments('Logging disk usage'); // Comments are persisted in the crontab
     ```
 
 -   From raw cron syntax string using a factory method :
