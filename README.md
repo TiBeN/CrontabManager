@@ -11,7 +11,7 @@ It enables you to :
 -   Manage cron jobs of others users than runtime user using some sudo
     tricks (see below).
 
-Requirments:
+Requirements
 ------------
 
 -   PHP 5.3+
@@ -20,15 +20,15 @@ Requirments:
 -   `sudo`, if you want to manage crontab of another user than runtime
     user without running into right issues (see below)
 
-Installation:
--------------
+Installation
+------------
 
 The library can be installed using Composer.
 
     composer require tiben/crontab-manager ~1.0
 
-Usage:
-------
+Usage
+-----
 
 The library is composed of three classes:
 
@@ -36,7 +36,7 @@ The library is composed of three classes:
 -   `CrontabRepository` is used to persist/retrieve your cron jobs.
 -   `CrontabAdapter` handles cron jobs persistance in the crontab.
 
-### Instantiate the repository:
+### Instantiate the repository
 
 In order to work, the CrontabRepository needs an instance of
 CrontabAdapter.
@@ -45,7 +45,7 @@ CrontabAdapter.
 $crontabRepository = new CrontabRepository(new CrontabAdapter());
 ```
 
-### Create new Job and persist it into the crontab:
+### Create new Job and persist it into the crontab
 
 Suppose you want to create a new job which consists of launching the
 command "df &gt;&gt; /tmp/df.log" every day at 23:30. You can do it in
@@ -79,7 +79,7 @@ $crontabRepository->addJob($crontabJob);
 $crontabRepository->persist();
 ```
 
-### Find a specific cron job from the crontab repository and update it:
+### Find a specific cron job from the crontab repository and update it
 
 Suppose we want to modify the hour of an already existing cronjob.
 Finding existings jobs is done using some regular expressions. The regex
@@ -92,7 +92,7 @@ $crontabJob->setHours(21);
 $crontabRepository->persist();
 ```
 
-### Remove a cron job from the crontab:
+### Remove a cron job from the crontab
 
 You can remove a job like this :
 
@@ -106,7 +106,7 @@ $crontabRepository->persist();
 Note: Since cron jobs are internally matched by reference, they must be
 previously obtained from the repository or previously added.
 
-### Work with the crontab of another user than runtime user:
+### Work with the crontab of another user than runtime user
 
 This feature allows you to manage the crontab of another user than the
 user who launched the runtime. This can be useful when the runtime user
