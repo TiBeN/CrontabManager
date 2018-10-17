@@ -1,3 +1,8 @@
+1.3.0 (2018-10-17)
+------------------
+- Implement fluent interface (Thanks @Menelion)
+- Fix typos in README
+
 1.2.2 (2018-09-25)
 ------------------
 - Make tests compatible with PHPUnit 6+
