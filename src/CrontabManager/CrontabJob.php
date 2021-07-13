@@ -340,7 +340,7 @@ class CrontabJob
     {
         // Check crontab line format validity
         $crontabLineRegex = '/^[\s\t]*(#)?[\s\t]*(([*0-9,-\/]+)[\s\t]+([*0-9,-\/]+)'
-            . '[\s\t]+([*0-9,-\/]+)[\s\t]+([*a-z0-9,-\/]+)[\s\t]+([*a-z0-9,-\/]+)|'
+            . '[\s\t]+([*0-9,-\/]+)[\s\t]+([*a-z0-9,-\/]+)[\s\t]+([*A-Za-z0-9,-\/]+)|'
             . '(@(reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)))'
             . '[\s\t]+([^#]+)([\s\t]+#(.+))?$/'
         ;
