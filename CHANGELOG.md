@@ -1,3 +1,8 @@
+1.3.1 (2018-10-17)
+------------------
+
+- Allow uppercase for days of the week (Thanks @TomLorenzi)
+
 1.3.0 (2018-10-17)
 ------------------
 - Implement fluent interface (Thanks @Menelion)
