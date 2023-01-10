@@ -24,7 +24,7 @@ namespace TiBeN\CrontabManager;
  *
  * @author TiBeN
  */
-class CrontabAdapter
+class CrontabAdapter implements CrontabAdapterInterface
 {
     private $userName;
     
