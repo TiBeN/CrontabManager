@@ -155,6 +155,13 @@ $crontabJob->setEnabled(false);
 This will prepend your cron job with a `#` in your
 crontab when persisting it.
 
+### Write your own adapter
+Additionally, if you cannot read another user's crontabs or if you are on a distributed architecture where crons are not 
+run on the machine executing the jobs, you can create any other Adapter for your architecture 
+by implementing the `CrontabAdapterInterface`.
+
+You can then instantiate the `CrontabRepository` with your adapter.
+
 Unit tests
 ----------
 
