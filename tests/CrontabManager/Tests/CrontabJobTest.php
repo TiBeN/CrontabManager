@@ -144,9 +144,23 @@ class CrontabJobTest extends \PHPUnit\Framework\TestCase
             ->setTaskCommandLine('df >> /tmp/df.log');
         $crontabLines[] = array('#   30 23 * * * df >> /tmp/df.log', $crontabJob);
 
+
+        /* Cli command containing hashtag */
+        $crontabJob = new CrontabJob();
+        $crontabJob
+            ->setEnabled(true)
+            ->setMinutes(0)
+            ->setHours(0)
+            ->setDayOfMonth('*')
+            ->setMonths('*')
+            ->setDayOfWeek('*')
+            ->setTaskCommandLine("cd /Users/../commands/; php somescript.php -p 'password#' >> /logs/somescript.log")
+            ->setComments('some comment');
+        $crontabLines[] = array("0 0 * * * cd /Users/../commands/; php somescript.php -p 'password#' >> /logs/somescript.log #some comment", $crontabJob);
+
         return $crontabLines;
     }
-    
+
     public function testFormatCrontabLine()
     {
         /* Well formatted crontab line */
