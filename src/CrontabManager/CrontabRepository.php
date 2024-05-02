@@ -55,7 +55,7 @@ class CrontabRepository
      *
      * @param CrontabAdapter $crontabAdapter
      */
-    public function __construct(CrontabAdapter $crontabAdapter)
+    public function __construct(CrontabAdapterInterface $crontabAdapter)
     {
         $this->crontabAdapter = $crontabAdapter;
         $this->readCrontab();
