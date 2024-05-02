@@ -342,7 +342,7 @@ class CrontabJob
         $crontabLineRegex = '/^[\s\t]*(#)?[\s\t]*(([*0-9,-\/]+)[\s\t]+([*0-9,-\/]+)'
             . '[\s\t]+([*0-9,-\/]+)[\s\t]+([*a-z0-9,-\/]+)[\s\t]+([*A-Za-z0-9,-\/]+)|'
             . '(@(reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)))'
-            . '[\s\t]+([^#]+)([\s\t]+#(.+))?$/'
+            . '[\s\t]+((?:[^#][^\s\t]*(?:(?:[\s\t])+)?)+)(?:#(.+))?$/';
         ;
 
         if (!preg_match($crontabLineRegex, $crontabLine, $matches)) {
@@ -371,9 +371,9 @@ class CrontabJob
             $crontabJob->setShortCut($matches[9]);
         }
         
-        $crontabJob->setTaskCommandLine($matches[10]);
-        if (!empty($matches[12])) {
-            $crontabJob->setComments($matches[12]);
+        $crontabJob->setTaskCommandLine(trim($matches[10]));
+        if (!empty($matches[11])) {
+            $crontabJob->setComments($matches[11]);
         }
         
         return $crontabJob;
