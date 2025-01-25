@@ -31,14 +31,15 @@ interface CrontabAdapterInterface
      * Read the crontab and return
      * raw data
      *
-     * @return String $output the crontab raw data
+     * @return string $output the crontab raw data
      */
     public function readCrontab();
 
     /**
      * Write the raw crontab data to the crontab.
      *
-     * @param String $crontabRawData
+     * @param string $crontabRawData
+     * @return void
      */
     public function writeCrontab($crontabRawData);
 }

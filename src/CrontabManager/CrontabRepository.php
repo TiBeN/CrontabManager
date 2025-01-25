@@ -26,21 +26,28 @@ namespace TiBeN\CrontabManager;
  */
 class CrontabRepository
 {
+    /**
+     * @var CrontabAdapterInterface
+     */
     private $crontabAdapter;
+
+    /**
+     * @var CrontabJob[]
+     */
     private $crontabJobs = array();
-    
+
     /**
      * Contain comments on the top of the crontab file. 
      *
-     * @var String
+     * @var string
      */
     public $headerComments;
-    
+
     /**
      * Contain lines to not consider as cronjob when parsing
      * the crontab
      *
-     * @var array
+     * @var string[]
      */
     public $crontabLinesToBypass = array(
 
@@ -60,23 +67,23 @@ class CrontabRepository
         $this->crontabAdapter = $crontabAdapter;
         $this->readCrontab();
     }
-    
+
     /**
      * Return the CrontabJob in the "connected" crontab
      *
-     * @return Array of CrontabJobs
+     * @return CrontabJob[]
      */
     public function getJobs()
     {
         return $this->crontabJobs;
     }
-        
+
     /**
      * Finds jobs by matching theirs task commands with a regex
      *
-     * @param String $regex
-     * @throws InvalidArgumentException
-     * @return Array of CronJobs
+     * @param string $regex
+     * @throws \InvalidArgumentException
+     * @return CrontabJob[]
      */
     public function findJobByRegex($regex)
     {
@@ -84,18 +91,17 @@ class CrontabRepository
         set_error_handler(function ($severity, $message, $file, $line) {
             throw new \Exception($message);
         });
-        
+
         try {
             preg_match($regex, 'test');
             restore_error_handler();
         } catch (\Exception $e) {
             restore_error_handler();
             throw new \InvalidArgumentException('Not a valid Regex : ' . $e->getMessage());
-            return;
         }
 
         $crontabJobs = array();
-        
+
         if (!empty($this->crontabJobs)) {
             foreach ($this->crontabJobs as $crontabJob) {
                 if (preg_match($regex, $crontabJob->formatCrontabLine())) {
@@ -103,14 +109,15 @@ class CrontabRepository
                 }
             }
         }
-        
+
         return $crontabJobs;
     }
-    
+
     /**
      * Add a new CrontabJob in the connected crontab
      *
      * @param CrontabJob $crontabJob
+     * @return void
      */
     public function addJob(CrontabJob $crontabJob)
     {
@@ -127,6 +134,7 @@ class CrontabRepository
      * Remove a CrontabJob from the connected crontab
      *
      * @param CrontabJob $crontabJob
+     * @return void
      */
     public function removeJob(CrontabJob $crontabJob)
     {
@@ -139,6 +147,8 @@ class CrontabRepository
 
     /**
      * Save all operations to the connected crontab.
+     * 
+     * @return void
      */
     public function persist()
     {
@@ -146,36 +156,38 @@ class CrontabRepository
         if (!empty($this->headerComments)) {
             $crontabRawData .= $this->headerComments;
         }
-        
+
         if (!empty($this->crontabJobs)) {
             foreach ($this->crontabJobs as $crontabJob) {
                 try {
                     $crontabLine = $crontabJob->formatCrontabLine();
                     $crontabRawData .= ($crontabLine . "\n");
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     /* Do nothing here */
                 }
             }
         }
-        
+
         $this->crontabAdapter->writeCrontab($crontabRawData);
     }
-    
+
     /**
      * Retrieve the crontab raw data from the system then parse it.
+     * 
+     * @return void
      */
     private function readCrontab()
     {
         $crontabRawData = $this->crontabAdapter->readCrontab();
-        
+
         if (empty($crontabRawData)) {
             return;
         }
-        
+
         $crontabRawLines = explode("\n", $crontabRawData);
-       
+
         foreach ($crontabRawLines as $crontabRawLine) {
-            
+
             try {
                 // Use The crontabJob Factory to test
                 // if the line is a crontab job line

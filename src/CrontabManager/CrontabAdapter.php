@@ -26,16 +26,22 @@ namespace TiBeN\CrontabManager;
  */
 class CrontabAdapter implements CrontabAdapterInterface
 {
+    /**
+     * @var ?string
+     */
     private $userName;
-    
+
+    /**
+     * @var bool
+     */
     private $useSudo;
-    
+
     /**
      * Instantiate a crontabAdapter
      * 
-     * @param String $userName Optional Tell the crontab 
+     * @param ?string $userName Optional Tell the crontab 
      * user where the adapter will try to read (by default user = runtime user)
-     * @param Boolean $useSudo Tell Adapter use sudo command to connect 
+     * @param bool $useSudo Tell Adapter use sudo command to connect 
      * to crontab of another user than the runtime user.
      *  
      * About sudo :
@@ -56,12 +62,12 @@ class CrontabAdapter implements CrontabAdapterInterface
         }
         $this->useSudo = $useSudo;
     }
-    
+
     /**
      * Read the crontab and return
      * raw data
      *
-     * @return String $output the crontab raw data
+     * @return string $output the crontab raw data
      */
     public function readCrontab()
     {
@@ -69,12 +75,12 @@ class CrontabAdapter implements CrontabAdapterInterface
             ? sprintf('sudo -n -u %s crontab -l', $this->userName)
             : ($this->userName ? sprintf('crontab -u %s -l', $this->userName) : 'crontab -l')
         ;
-            
+
         exec($crontabCommandLine . ' 2>&1', $output, $exitCode);
-                
+
         /* exec error handling */
         if ($exitCode !== 0) {
-            
+
             /* Special case : the crontab is empty throw bad exit code but access is ok */
             if (!preg_match('/no crontab for .+$/', $output[0])) {
                 throw new \DomainException(
@@ -86,20 +92,20 @@ class CrontabAdapter implements CrontabAdapterInterface
         } else {
             $output = implode("\n", $output);
         }
-        
+
         return $output;
-        
+
     }
-    
+
     /**
      * Write the raw crontab data to the crontab.
      *
-     * @param String $crontabRawData
+     * @param string $crontabRawData
      */
     public function writeCrontab($crontabRawData)
     {
         $crontabRawData = escapeshellarg($crontabRawData);
-        
+
         $crontabCommandLine = (isset($this->userName) && $this->useSudo)
             ? sprintf('echo %s | sudo -n -u %s crontab -', $crontabRawData, $this->userName)
             : ($this->userName
@@ -107,11 +113,11 @@ class CrontabAdapter implements CrontabAdapterInterface
                 : sprintf('echo %s | crontab -', $crontabRawData)
             )
         ;
-        
+
         exec($crontabCommandLine . ' 2>&1', $output, $exitCode);
-        
+
         /* exec error handling */
-        if ($exitCode !== 0) { 
+        if ($exitCode !== 0) {
             throw new \DomainException(
                 'Error when trying to write crontab : ' . implode(' ', $output)
             );
